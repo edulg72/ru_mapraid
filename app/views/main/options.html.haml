@@ -1,0 +1,20 @@
+%h3.text-center= t('options-change')
+.alert.alert-warning.alert-dismissible{:role => 'alert'}
+  %button.close{'data-dismiss' => 'alert', 'aria-label' => 'Fechar'}
+    %span{'aria-hidden' => 'true'} &times;
+  %strong= t('options-attention')
+  = t('options-cookies')
+  %br
+  = t('options-computer')
+= form_tag('/save', :class => 'form-horizontal', :method => 'POST') do
+  .form-group
+    %label.col-sm-4.col-md-3.col-lg-2.control-label WME
+    .col-sm-8.col-md-9.col-lg-10
+      %select.form-control{:name => 'wme_url'}
+        = options_for_select([[t('wme-standard'),'https://www.waze.com/'],[t('wme-beta'),'https://editor-beta.waze.com/']],@wme_url)
+  .form-group
+    %label.col-sm-4.col-md-3.col-lg-2.control-label= t('editor-level')
+    .col-sm-8.col-md-9.col-lg-10
+      %select.form-control{:name => 'editor_level'}
+        = options_for_select([['1',1],['2',2],['3',3],['4',4],['5',5],['6',6]],@editor_level)
+  %button.btn.btn-primary{:type => 'submit'}= t('save-options')
