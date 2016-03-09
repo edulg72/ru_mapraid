@@ -11,84 +11,7 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
---
--- Name: vw_mp_refresh_table(); Type: FUNCTION; Schema: public; Owner: waze
---
 
-CREATE FUNCTION vw_mp_refresh_table() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-begin
-  drop table if exists vw_mp;
-  create table vw_mp as
-    select mp.id, mp.resolved_by, mp.resolved_on, mp.weight, st_x(mp.position) as longitude, st_y(mp.position) as latitude, mp.resolution, mp.city_id from mp;
-end;
-$$;
-
-
-ALTER FUNCTION public.vw_mp_refresh_table() OWNER TO waze;
-
---
--- Name: vw_places_refresh_table(); Type: FUNCTION; Schema: public; Owner: waze
---
-
-CREATE FUNCTION vw_places_refresh_table() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-begin
-  drop table if exists vw_places;
-  create table vw_places as
-    select id, name, street_id, created_on, created_by, updated_on, updated_by, st_x(position) as longitude, st_y(position) as latitude, lock, approved, residential, category, ad_locked, city_id from places;
-  create index idx_places_city_id on vw_places (city_id nulls last);
-end;
-$$;
-
-
-ALTER FUNCTION public.vw_places_refresh_table() OWNER TO waze;
-
---
--- Name: vw_pu_refresh_table(); Type: FUNCTION; Schema: public; Owner: waze
---
-
-CREATE FUNCTION vw_pu_refresh_table() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-begin
-  drop table if exists vw_pu;
-  create table vw_pu as
-    select p.id as id,
-           pu.created_by as created_by,
-           pu.created_on as created_on,
-           ST_X(pu.position) as longitude,
-           ST_Y(pu.position) as latitude,
-           pu.staff as staff,
-           coalesce(p.name, '[No Name]'::character varying) as name,
-           pu.city_id as city_id
-    from places p, pu
-    where p.id = pu.place_id;
-end;
-$$;
-
-
-ALTER FUNCTION public.vw_pu_refresh_table() OWNER TO waze;
-
---
--- Name: vw_ur_refresh_table(); Type: FUNCTION; Schema: public; Owner: waze
---
-
-CREATE FUNCTION vw_ur_refresh_table() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-begin
-  drop table if exists vw_ur;
-  create table vw_ur as
-    select id, comments, last_comment, last_comment_on, last_comment_by, first_comment_on, resolved_by, resolved_on, created_on, st_x(position) as longitude, st_y(position) as latitude, resolution, city_id from ur;
-    create index idx_ur_city_id on vw_ur (city_id nulls last);
-end;
-$$;
-
-
-ALTER FUNCTION public.vw_ur_refresh_table() OWNER TO waze;
 
 SET default_tablespace = '';
 
@@ -272,33 +195,6 @@ CREATE TABLE segments (
 ALTER TABLE public.segments OWNER TO waze;
 
 --
--- Name: segments2; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
---
-
-CREATE TABLE segments2 (
-    id integer NOT NULL,
-    geom geometry(LineString,4674),
-    length integer,
-    level smallint,
-    last_edit_on timestamp with time zone,
-    last_edit_by integer,
-    lock smallint,
-    connected boolean,
-    street_id integer,
-    roadtype smallint,
-    dc_density smallint,
-    fwdmaxspeed integer,
-    revmaxspeed integer,
-    fwddirection boolean,
-    revdirection boolean,
-    city_id integer,
-    cross_segment boolean
-);
-
-
-ALTER TABLE public.segments2 OWNER TO waze;
-
---
 -- Name: states; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
 --
 
@@ -312,51 +208,6 @@ CREATE TABLE states (
 
 
 ALTER TABLE public.states OWNER TO waze;
-
---
--- Name: states_shapes; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
---
-
-CREATE TABLE states_shapes (
-    gid integer NOT NULL,
-    id_0 numeric(10,0),
-    iso character varying(3),
-    name_0 character varying(75),
-    id_1 numeric(10,0),
-    name_1 character varying(75),
-    hasc_1 character varying(15),
-    ccn_1 numeric(10,0),
-    cca_1 character varying(254),
-    type_1 character varying(50),
-    engtype_1 character varying(50),
-    nl_name_1 character varying(50),
-    varname_1 character varying(150),
-    geom geometry(MultiPolygon,4326)
-);
-
-
-ALTER TABLE public.states_shapes OWNER TO waze;
-
---
--- Name: states_shapes_gid_seq; Type: SEQUENCE; Schema: public; Owner: waze
---
-
-CREATE SEQUENCE states_shapes_gid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.states_shapes_gid_seq OWNER TO waze;
-
---
--- Name: states_shapes_gid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: waze
---
-
-ALTER SEQUENCE states_shapes_gid_seq OWNED BY states_shapes.gid;
-
 
 --
 -- Name: streets; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
@@ -420,38 +271,39 @@ CREATE TABLE users (
 ALTER TABLE public.users OWNER TO waze;
 
 --
--- Name: vw_mp; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
+-- Name: vw_mp; Type: MATERIALIZED VIEW; Schema: public; Owner: waze; Tablespace: 
 --
 
-CREATE TABLE vw_mp (
-    id character varying(20),
-    resolved_by integer,
-    resolved_on timestamp without time zone,
-    weight integer,
-    longitude double precision,
-    latitude double precision,
-    resolution integer,
-    city_id integer
-);
-
+CREATE MATERIALIZED VIEW vw_mp AS
+  SELECT mp.id, 
+         mp.resolved_by, 
+         mp.resolved_on, 
+         mp.weight, 
+         st_x(mp.position) as longitude, 
+         st_y(mp.position) as latitude, 
+         mp.resolution, 
+         mp.city_id 
+  FROM mp
+  WITH NO DATA;
 
 ALTER TABLE public.vw_mp OWNER TO waze;
 
 --
--- Name: vw_pu; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
+-- Name: vw_pu; Type: MATERIALIZED VIEW; Schema: public; Owner: waze; Tablespace: 
 --
 
-CREATE TABLE vw_pu (
-    id character varying(50),
-    created_by integer,
-    created_on timestamp without time zone,
-    longitude double precision,
-    latitude double precision,
-    staff boolean,
-    name character varying,
-    city_id integer
-);
-
+CREATE MATERIALIZED VIEW vw_pu AS
+  SELECT p.id as id,
+         pu.created_by as created_by,
+         pu.created_on as created_on,
+         ST_X(pu.position) as longitude,
+         ST_Y(pu.position) as latitude,
+         pu.staff as staff,
+         coalesce(p.name, '[No Name]'::character varying) as name,
+         pu.city_id as city_id
+  FROM places p, pu
+  WHERE p.id = pu.place_id
+  WITH NO DATA;
 
 ALTER TABLE public.vw_pu OWNER TO waze;
 
@@ -503,24 +355,25 @@ CREATE MATERIALIZED VIEW vw_streets AS
 ALTER TABLE public.vw_streets OWNER TO waze;
 
 --
--- Name: vw_ur; Type: TABLE; Schema: public; Owner: waze; Tablespace: 
+-- Name: vw_ur; Type: MATERIALIZED VIEW; Schema: public; Owner: waze; Tablespace: 
 --
 
-CREATE TABLE vw_ur (
-    id integer,
-    comments integer,
-    last_comment text,
-    last_comment_on timestamp with time zone,
-    last_comment_by integer,
-    first_comment_on timestamp with time zone,
-    resolved_by integer,
-    resolved_on timestamp with time zone,
-    created_on timestamp with time zone,
-    longitude double precision,
-    latitude double precision,
-    resolution integer,
-    city_id integer
-);
+CREATE MATERIALIZED VIEW vw_ur AS
+  SELECT ur.id, 
+         ur.comments, 
+         ur.last_comment, 
+         ur.last_comment_on, 
+         ur.last_comment_by, 
+         ur.first_comment_on, 
+         ur.resolved_by, 
+         ur.resolved_on, 
+         ur.created_on, 
+         st_x(ur.position) as longitude, 
+         st_y(ur.position) as latitude, 
+         ur.resolution, 
+         ur.city_id 
+  FROM ur 
+  WITH NO DATA;
 
 
 ALTER TABLE public.vw_ur OWNER TO waze;
@@ -604,14 +457,6 @@ ALTER TABLE ONLY pu
 
 
 --
--- Name: segments2_pkey; Type: CONSTRAINT; Schema: public; Owner: waze; Tablespace: 
---
-
-ALTER TABLE ONLY segments2
-    ADD CONSTRAINT segments2_pkey PRIMARY KEY (id);
-
-
---
 -- Name: segments_pkey; Type: CONSTRAINT; Schema: public; Owner: waze; Tablespace: 
 --
 
@@ -692,13 +537,6 @@ CREATE INDEX idx_segments_longitude ON segments USING btree (longitude);
 --
 
 CREATE INDEX idx_segments_roadtype ON segments USING btree (roadtype);
-
-
---
--- Name: idx_ur_city_id; Type: INDEX; Schema: public; Owner: waze; Tablespace: 
---
-
-CREATE INDEX idx_ur_city_id ON vw_ur USING btree (city_id);
 
 
 --
