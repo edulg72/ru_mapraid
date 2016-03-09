@@ -15,7 +15,7 @@ end
 puts "#!/bin/bash\n\necho \"Start: $(date '+%d/%m/%Y %H:%M:%S')\"\n\ncase \"$3\" in"
 
 db = PG::Connection.new(:hostaddr => '127.0.0.1', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
-db.prepare('box_estado','select nl_name_1 from states_shapes where (ST_Overlaps(geom,ST_SetSRID(ST_MakeBox2D(ST_Point($1,$2),ST_Point($3,$4)),4326)) or ST_Contains(geom,ST_SetSRID(ST_MakeBox2D(ST_Point($1,$2),ST_Point($3,$4)),4326))) and id = $5')
+db.prepare('box_estado','select nl_name_1 from states_shapes where (ST_Overlaps(geom,ST_SetSRID(ST_MakeBox2D(ST_Point($1,$2),ST_Point($3,$4)),4326)) or ST_Contains(geom,ST_SetSRID(ST_MakeBox2D(ST_Point($1,$2),ST_Point($3,$4)),4326))) and id_1 = $5')
 
 db.exec("select id_1, hasc_1, nl_name_1, ST_Xmin(ST_Envelope(geom)) as longoeste, ST_Xmax(ST_Envelope(geom)) longleste, ST_Ymax(ST_Envelope(geom)) as latnorte, ST_Ymin(ST_Envelope(geom)) as latsul from countries_tmp").each do |estado|
   puts "# #{estado['nl_name_1']}"
@@ -30,13 +30,13 @@ db.exec("select id_1, hasc_1, nl_name_1, ST_Xmin(ST_Envelope(geom)) as longoeste
     while lonIni < estado['longleste'].to_f
 #      puts "  Longitude: [#{lonIni} #{(lonIni + passo).round(8)}] #{area}"
       if area
-        if db.exec_prepared('box_estado',[lonIni, (latIni - passo).round(8), (lonIni + passo).round(8), latIni, estado['id']]).ntuples == 0
+        if db.exec_prepared('box_estado',[lonIni, (latIni - passo).round(8), (lonIni + passo).round(8), latIni, estado['id_1']]).ntuples == 0
           area = false
           puts "#{out} #{lonIni} #{(latIni - passo).round(8)} #{passo}"
           out = ''
         end
       else
-        if db.exec_prepared('box_estado',[lonIni, (latIni - passo).round(8), (lonIni + passo).round(8), latIni, estado['id']]).ntuples > 0
+        if db.exec_prepared('box_estado',[lonIni, (latIni - passo).round(8), (lonIni + passo).round(8), latIni, estado['id_1']]).ntuples > 0
           area = true
           out = "    ruby scan_segments.rb $1 $2 #{lonIni} #{latIni}"
         end
