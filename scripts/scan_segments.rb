@@ -108,34 +108,32 @@ end
 
 busca(db,agent,LongOeste,LatNorte,LongLeste,LatSul,Passo,1)
 
-db.exec("delete from users where id in (#{@users.keys.join(',')})")
+db.exec("delete from users where id in (#{@users.keys.join(',')})") if @users.size > 0
 db.copy_data('COPY users (id,username,rank) FROM STDIN CSV') do
   @users.each_value {|u| db.put_copy_data u}
 end
 db.exec('vacuum users')
 
-db.exec("delete from states where id in (#{@states.keys.join(',')})")
+db.exec("delete from states where id in (#{@states.keys.join(',')})") if @states.size > 0
 db.copy_data('COPY states (id,name,country_id) FROM STDIN CSV') do
   @states.each_value {|s| db.put_copy_data s}
 end
 db.exec('vacuum states')
 
-db.exec("delete from cities where id in (#{@cities.keys.join(',')})")
+db.exec("delete from cities where id in (#{@cities.keys.join(',')})") if @cities.size > 0
 db.copy_data('COPY cities (id,name,state_id,isempty) FROM STDIN CSV') do
   @cities.each_value {|c| db.put_copy_data c}
 end
 db.exec('vacuum cities')
 
-db.exec("delete from streets where id in (#{@streets.keys.join(',')})")
+db.exec("delete from streets where id in (#{@streets.keys.join(',')})") if @streets.size > 0
 db.copy_data('COPY streets (id,name,city_id,isempty) FROM STDIN CSV') do
   @streets.each_value {|s| db.put_copy_data s}
 end
 db.exec('vacuum streets')
 
-db.exec("delete from segments where id in (#{@segments.keys.join(',')})")
+db.exec("delete from segments where id in (#{@segments.keys.join(',')})") if @segments.size > 0
 db.copy_data('COPY segments (id, longitude, latitude, roadtype, level, lock, last_edit_by, last_edit_on, street_id, length, connected, fwddirection, revdirection, fwdmaxspeed, revmaxspeed, fwdmaxspeedunverified, revmaxspeedunverified) FROM STDIN CSV') do
   @segments.each_value {|s| db.put_copy_data s}
 end
 db.exec('vacuum segments')
-
-
