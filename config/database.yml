@@ -11,7 +11,7 @@ development:
   <<: *default
 #  host: 104.236.252.215
   host: localhost
-  database: wazeru
+  database: wazedb
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -24,6 +24,6 @@ test:
 production:
   <<: *default
   host: localhost
-  database: wazeru
+  database: wazedb
   username: waze
   password: waze
