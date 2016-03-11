@@ -20,7 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  app-title: "MegaMapRaid Poland"
+  app-title: "Russia"
   density: "Density"
   density-description: "Amount of disconnected segments near this one"
   disconnected: "Disconnected segments"
