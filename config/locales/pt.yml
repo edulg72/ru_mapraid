@@ -20,9 +20,53 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 pt:
-  app-title: "MapRaid Brasil"
+  app-title: "Russia"
   density: "Densidade"
-  nav-first-page: "Principal"
+  density-description: "Amount of disconnected segments near this one"
+  disconnected: "Segmentos desconectados"
+  disconnected-small: "ou com conversões desabilitadas"
+  editor-level: "Editor level"
+  elevation: "Elevação"
+  exaggerated-elevations: 'Segments with "exaggerated" elevations'
+  filter-warning-1: "Exibindo apenas segmentos com lock "
+  filter-warning-2: "ou menor"
+  last-update: 'Última atualização'
+  lock: "Actual lock"
+  nav-first-page: "Página inicial"
   no-city: "Sem cidade"
-  no-street: "Sem nome"
-  updated-at: "Atualizado em"
+  no-street: "Sem nome de rua"
+  options-change: "Opções de visualização"
+  options-cookies: "Those configurations only works in cookie-enabled browsers!"
+  options-computer: "Also, they are valid only for this computer and this browser. If you use more computers or browsers, just repeat this process in any of them."
+  options-attention: "Attention:"
+  roads-no-speed: "Important roads without speed"  
+  roadtype: "Road type"
+  save-options: "Gravar"
+  segment-location: "Segment's location"
+  speed-ab: 'Velocidade A para B'
+  speed-ba: 'Velocidade B para A'
+  undefined: "Undefined"
+  unnamed: "Segmento sem nome"
+  unnamed-segments: 'Unnamed segments'
+  unverified-speed: "Unverified speed"
+  updated-at: "Updated at"
+  wme-standard: "Standard"
+  wme-beta: "Beta"
+  wrong-lock: "Roads with insufficient lock level"
+  
+  # Road types
+  freeway: "Freeway"
+  major-highway: "Major Highway"
+  minor-highway: "Minor Highway"
+  ramp: "Ramp"
+  primary-street: "Primary Street"
+  street: "Street"
+  dirt-road: "Dirt road / 4X4 Trail"
+  parking-lot-road: "Parking Lot Road"
+  private-road: "Private Road"
+  walking-trail: "Walking Trail"
+  pedestrian-boardwalk: "Pedestrian Boardwalk"
+  stairway: "Stairway"
+  railroad: "Railroad"
+  runway: "Runway/Taxiway"
+  ferry: "Ferry"
