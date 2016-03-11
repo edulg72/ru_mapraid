@@ -3,6 +3,6 @@ class Area < ActiveRecord::Base
   
   has_many :segments
   
-  scope :mapraid, -> {where('id > 100')}
+#  scope :mapraid, -> {where('id > 100')}
 #  scope :others, -> {where('id not in (21,22)')}
 end
