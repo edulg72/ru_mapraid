@@ -1,86 +1,31 @@
 - cache ['index',@update.updated_at] do
   .container
     .row
-      .col-sm-12.col-md-12.col-lg-8
-        .panel.panel-default
-          .panel-heading
-            .panel-title Калужская область
-          .panel-body
-            .map
-              = render partial: 'mapraid'
-      .col-sm-12.col-md-12.col-lg-4
-        .text-center= "#{t('updated-at')} #{@update.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
-        #accordion.panel-group{:role => "tablist", 'aria-multiselecttable' => "true"}
+      - @areas.each do |area|
+        .col-sm-12.col-md-6.col-lg-4
           .panel.panel-default
-            #disconnected.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#disconnected-body", 'aria-expanded' => "true", 'aria-controls' => "disconnected-body"} 
-                  =t('disconnected')
-                  %span.badge.text-right= @segments.drivable.disconnected.count
-            #disconnected-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "disconnected"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.drivable.disconnected.count
-          .panel.panel-default
-            #lock.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#lock-body", 'aria-expanded' => "true", 'aria-controls' => "lock-body"} 
-                  =t('wrong-lock')
-                  %span.badge= @segments.wrong_lock.count
-            #lock-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "lock"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.wrong_lock.count
-          .panel.panel-default
-            #unverified.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#unverified-body", 'aria-expanded' => "true", 'aria-controls' => "unverified-body"} 
-                  =t('unverified-speed')
-                  %span.badge= @segments.important.unverified_speed.count
-            #unverified-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "unverified"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.important.unverified_speed.count                    
-          .panel.panel-default
-            #speed.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#speed-body", 'aria-expanded' => "true", 'aria-controls' => "speed-body"} 
-                  =t('roads-no-speed')
-                  %span.badge= @segments.without_speed.count
-            #speed-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "speed"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.without_speed.count
-          .panel.panel-default
-            #elevation.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#elevation-body", 'aria-expanded' => "true", 'aria-controls' => "elevation-body"} 
-                  =t('exaggerated-elevations')
-                  %span.badge= @segments.where('level < -3 or level > 3').count
-            #elevation-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "elevation"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.where('level < -3 or level > 3').count                      
-          .panel.panel-default
-            #unnamed.panel-heading{:role => "tab"}
-              %h4.panel-title
-                %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#unnamed-body", 'aria-expanded' => "true", 'aria-controls' => "unnamed-body"} 
-                  =t('unnamed-segments')
-                  %span.badge= @segments.no_name.count
-            #unnamed-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "unnamed"}
-              %ul.list_group
-                - @areas.order('name').each do |a|
-                  %li.list-group-item
-                    %a{:href => "/segments_area/#{a.id}"}= a.name
-                    %span.badge= a.segments.no_name.count 
-
+            .panel-heading
+              .panel-title= area.name
+            .panel-body
+              .map
+                = render partial: area.map_name
+              .text-center= "#{t('updated-at')} #{@update.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
+            %ul.list_group
+              %li.list-group-item
+                = t('disconnected')
+                %span.badge.text-right= area.segments.drivable.disconnected.count
+              %li.list-group-item
+                =t('wrong-lock')
+                %span.badge= area.segments.wrong_lock.count
+              %li.list-group-item
+                =t('unverified-speed')
+                %span.badge= area.segments.important.unverified_speed.count
+              %li.list-group-item
+                =t('roads-no-speed')
+                %span.badge= area.segments.without_speed.count
+              %li.list-group-item
+                =t('exaggerated-elevations')
+                %span.badge= area.segments.where('level < -3 or level > 3').count
+              %li.list-group-item
+                =t('unnamed-segments')
+                %span.badge= area.segments.no_name.count
