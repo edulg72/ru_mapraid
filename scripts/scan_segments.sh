@@ -6764,4 +6764,5 @@ psql -h 127.0.0.1 -d wazedb -U waze -c 'update segments s1 set dc_density = (sel
 psql -h 127.0.0.1 -d wazedb -U waze -c "update updates set updated_at = current_timestamp where object = 'segments';"
 psql -h 127.0.0.1 -d wazedb -U waze -c 'refresh materialized view vw_segments; refresh materialized view vw_streets;'
 psql -h 127.0.0.1 -d wazedb -U waze -c 'vacuum analyze;'
-End exec: $(date '+%d/%m/%Y %H:%M:%S')
+
+echo "End exec: $(date '+%d/%m/%Y %H:%M:%S')"
