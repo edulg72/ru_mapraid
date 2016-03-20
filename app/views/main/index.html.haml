@@ -8,7 +8,7 @@
               .panel-title= area.name
             .panel-body
               .map
-                = render partial: area.map_name
+                = render partial: area.map_name.downcase
               .text-center= "#{t('updated-at')} #{@update.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
             %ul.list_group
               %li.list-group-item
