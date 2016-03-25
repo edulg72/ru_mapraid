@@ -1,4 +1,4 @@
-- cache [@area.class.to_s,@area.id,@update.updated_at,@editor_level,@wme_url] do
+- cache [@area.class.to_s,@area.id,@area.updates.updated_at,@editor_level,@wme_url] do
   .page-header
     %h3
       = @area.name
@@ -11,7 +11,7 @@
             - @area.cities.order(:name).each do |c|
               %li
                 %a{:href => "/segments/#{c.gid}"}= c.name
-      %small= "#{t('updated-at')} #{ @update.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
+      %small= "#{t('updated-at')} #{ @area.updates.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
     - if @editor_level < 6
       .text-right
         = "#{t('filter-warning-1')} #{@editor_level} #{t('filter-warning-2')}"
@@ -134,10 +134,10 @@
           %table.table.table-condensed.table-hover
             %thead
               %tr
-                %th.text-center{:width => '100'} ID
+                %th.text-center{:width => '100'}= t('id')
                 %th= t('roadtype')
                 %th= t('last-update')
-                %th Editor
+                %th= t('editor')
             %tbody
               - @area.segments.lock_level(@editor_level).no_name.order("last_edit_on").each do |segment|
                 %tr

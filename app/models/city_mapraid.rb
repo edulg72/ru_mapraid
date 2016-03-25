@@ -4,6 +4,7 @@ class CityMapraid < ActiveRecord::Base
   belongs_to :area
   belongs_to :city, foreign_key: :city_id, class_name: 'City'
   has_many :segments, foreign_key: :city_id
+  has_one :updates, through: :area
   
   def color    
     d = self.segments.disconnected.count

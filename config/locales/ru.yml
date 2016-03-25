@@ -25,11 +25,13 @@ ru:
   density-description: "Количество разорванных сегментов поблизости"
   disconnected: "Сегменты не подсоединены"
   disconnected-small: "или нет разрешенных поворотов"
+  editor: 'Editor'
   editor-level: "Уровень редактора"
   elevation: "Возвышение"
   exaggerated-elevations: "Некорректное возвышение"
   filter-warning-1: "Showing only segments with lock "
   filter-warning-2: "or less"
+  id: 'ID'
   last-update: 'Last update'
   lock: "Уроверь блокировки"
   nav-first-page: "Главная страница"

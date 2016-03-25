@@ -25,11 +25,13 @@ pt:
   density-description: "Amount of disconnected segments near this one"
   disconnected: "Segmentos desconectados"
   disconnected-small: "ou com conversões desabilitadas"
+  editor: 'Editor'
   editor-level: "Editor level"
   elevation: "Elevação"
   exaggerated-elevations: 'Segments with "exaggerated" elevations'
   filter-warning-1: "Exibindo apenas segmentos com lock "
   filter-warning-2: "ou menor"
+  id: 'ID'
   last-update: 'Última atualização'
   lock: "Actual lock"
   nav-first-page: "Página inicial"

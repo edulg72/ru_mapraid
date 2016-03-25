@@ -1,4 +1,4 @@
-- cache ['index',@areas,@update.updated_at] do
+- cache ['index',@areas,@update] do
   .container
     .row
       - @areas.each do |area|
@@ -7,25 +7,23 @@
             .panel-heading
               .panel-title= area.name
             .panel-body
-              .map
-                = render partial: area.map_name.downcase
-              .text-center= "#{t('updated-at')} #{@update.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
-            %ul.list_group
+              .text-right= "#{t('updated-at')} #{area.updates.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
+            %ul.list-group
               %li.list-group-item
-                = t('disconnected')
+                %a{:href => "/segments_area/#{area.id}"}= t('disconnected')
                 %span.badge.text-right= area.segments.drivable.disconnected.count
               %li.list-group-item
-                =t('wrong-lock')
+                %a{:href => "/segments_area/#{area.id}"}=t('wrong-lock')
                 %span.badge= area.segments.wrong_lock.count
               %li.list-group-item
-                =t('unverified-speed')
+                %a{:href => "/segments_area/#{area.id}"}=t('unverified-speed')
                 %span.badge= area.segments.important.unverified_speed.count
               %li.list-group-item
-                =t('roads-no-speed')
+                %a{:href => "/segments_area/#{area.id}"}=t('roads-no-speed')
                 %span.badge= area.segments.without_speed.count
               %li.list-group-item
-                =t('exaggerated-elevations')
+                %a{:href => "/segments_area/#{area.id}"}=t('exaggerated-elevations')
                 %span.badge= area.segments.where('level < -3 or level > 3').count
               %li.list-group-item
-                =t('unnamed-segments')
+                %a{:href => "/segments_area/#{area.id}"}=t('unnamed-segments')
                 %span.badge= area.segments.no_name.count

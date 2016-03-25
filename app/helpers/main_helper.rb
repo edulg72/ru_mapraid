@@ -12,7 +12,7 @@ module MainHelper
       when 2
         t("primary-street")
       when 1
-        t("Street")
+        t("street")
       when 8
         t("dirt-road")
       when 20

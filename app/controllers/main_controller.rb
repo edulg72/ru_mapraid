@@ -3,7 +3,7 @@ class MainController < ApplicationController
   def index
     @areas = Area.all
     @segments = Segment.all
-    @update = Update.find('segments')
+    @update = Update.maximum('updated_at')
     @nav = [{ t('nav-first-page') => '/'}]
   end
   
@@ -17,7 +17,6 @@ class MainController < ApplicationController
 
   def segments_area
     @area = Area.find(params['id'])
-    @update = Update.find('segments')
     @editor_level = (cookies[:editor_level].nil? ? 6 : cookies[:editor_level].to_i)
     @wme_url = (cookies[:wme_url].nil? ? 'https://www.waze.com/' : cookies[:wme_url])
     @nav = [{@area.name => '#'},{ t('nav-first-page') => '/'}]
