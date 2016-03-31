@@ -146,3 +146,26 @@
                   %td= roadtype_name(segment.roadtype)
                   %td= segment.last_edit_on.strftime('%d/%m/%Y %H:%M')
                   %td= "#{segment.editor.username}(#{segment.editor.rank})"
+    - if @area.segments.lock_level(@editor_level).roads.without_name.count > 0
+      .panel.panel-default
+        #blank.panel-heading{:role => "tab"}
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#blank-body", 'aria-expanded' => "true", 'aria-controls' => "blank-body"} 
+              =t('roads-blank-name')
+              %span.badge= @area.segments.lock_level(@editor_level).roads.without_name.count
+        #blank-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "blank"}
+          %table.table.table-condensed.table-hover
+            %thead
+              %tr
+                %th.text-center{:width => '100'}= t('id')
+                %th= t('roadtype')
+                %th= t('last-update')
+                %th= t('editor')
+            %tbody
+              - @area.segments.lock_level(@editor_level).roads.without_name.order("last_edit_on").each do |segment|
+                %tr
+                  %td
+                    %a{href: "#{@wme_url}editor/?zoom=5&lat=#{segment.latitude}&lon=#{segment.longitude}&segments=#{segment.id}", target: 'WME'}= segment.id
+                  %td= roadtype_name(segment.roadtype)
+                  %td= segment.last_edit_on.strftime('%d/%m/%Y %H:%M')
+                  %td= "#{segment.editor.username}(#{segment.editor.rank})"

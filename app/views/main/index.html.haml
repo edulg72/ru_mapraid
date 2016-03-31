@@ -27,3 +27,6 @@
               %li.list-group-item
                 %a{:href => "/segments_area/#{area.id}"}=t('unnamed-segments')
                 %span.badge= area.segments.no_name.count
+              %li.list-group-item
+                %a{:href => "/segments_area/#{area.id}"}=t('roads-blank-name')
+                %span.badge= area.segments.roads.without_name.count
