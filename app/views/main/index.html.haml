@@ -30,3 +30,6 @@
               %li.list-group-item
                 %a{:href => "/segments_area/#{area.id}"}=t('roads-blank-name')
                 %span.badge= area.segments.roads.no_roundabout.without_name.count
+              %li.list-group-item
+                %a{:href => "/segments_area/#{area.id}"}=t('roads-wrong-speed')
+                %span.badge= area.segments.wrong_speed.count

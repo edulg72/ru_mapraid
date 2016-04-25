@@ -42,7 +42,8 @@ pt:
   options-computer: "Also, they are valid only for this computer and this browser. If you use more computers or browsers, just repeat this process in any of them."
   options-attention: "Attention:"
   roads-blank-name: "Roads with no name"
-  roads-no-speed: "Important roads without speed"  
+  roads-no-speed: "Important roads without speed"
+  roads-wrong-speed: "Roads with wrong speed"
   roadtype: "Road type"
   save-options: "Gravar"
   segment-location: "Segment's location"
@@ -56,7 +57,7 @@ pt:
   wme-standard: "Standard"
   wme-beta: "Beta"
   wrong-lock: "Roads with insufficient lock level"
-  
+
   # Road types
   freeway: "Freeway"
   major-highway: "Major Highway"

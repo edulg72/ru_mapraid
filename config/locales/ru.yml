@@ -42,7 +42,8 @@ ru:
   options-computer: "Кроме того, они действительны только для этого компьютера и этого браузера. Если вы используете несколько компьютеров или браузеров, просто повторите процесс в любом из них."
   options-attention: "Внимание:"
   roads-blank-name: "Important roads with no name"
-  roads-no-speed: "Важные дороги без скоростей"  
+  roads-no-speed: "Важные дороги без скоростей"
+  roads-wrong-speed: "Roads with wrong speed"
   roadtype: "Тип дороги"
   save-options: "Сохранить"
   segment-location: "Расположение сегмента"
@@ -56,7 +57,7 @@ ru:
   wme-standard: "Стандатный"
   wme-beta: "Бета"
   wrong-lock: "Недостаточный уроверь блокировки"
-  
+
   # Road types
   freeway: "Магистраль"
   major-highway: "Важное шоссе"

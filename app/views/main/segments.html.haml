@@ -20,8 +20,8 @@
     - if @area.segments.lock_level(@editor_level).drivable.disconnected.size > 0
       .panel.panel-default
         #disconnected.panel-heading{:role => "tab"}
-          %h4.panel-title 
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#disconnected-body", 'aria-expanded' => "true", 'aria-controls' => "disconnected-body"} 
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#disconnected-body", 'aria-expanded' => "true", 'aria-controls' => "disconnected-body"}
               =t('disconnected')
               %small= t('disconnected-small')
               %span.badge= @area.segments.lock_level(@editor_level).drivable.disconnected.size
@@ -32,7 +32,7 @@
                 %th.text-center{:width => "100", 'data-toggle' => "tooltip", 'data-placement' => "top", :title => t('density-description')}= t('density')
                 %th= t('segment-location')
                 %th= t('roadtype')
-            %tbody  
+            %tbody
               - @area.segments.lock_level(@editor_level).drivable.disconnected.order('dc_density desc').each do |segment|
                 %tr
                   %td.text-center= segment.dc_density
@@ -42,8 +42,8 @@
     - if @area.segments.lock_level(@editor_level).wrong_lock.size > 0
       .panel.panel-default
         #lock.panel-heading{:role => "tab"}
-          %h4.panel-title 
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#lock-body", 'aria-expanded' => "true", 'aria-controls' => "lock-body"} 
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#lock-body", 'aria-expanded' => "true", 'aria-controls' => "lock-body"}
               =t('wrong-lock')
               %span.badge= @area.segments.lock_level(@editor_level).wrong_lock.size
         #lock-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "lock"}
@@ -53,7 +53,7 @@
                 %th=t('segment-location')
                 %th=t('roadtype')
                 %th=t('lock')
-            %tbody  
+            %tbody
               - @area.segments.lock_level(@editor_level).wrong_lock.order('roadtype desc').limit(10000).each do |segment|
                 %tr
                   %td
@@ -63,8 +63,8 @@
     - if @area.segments.lock_level(@editor_level).important.unverified_speed.size > 0
       .panel.panel-default
         #unverified.panel-heading{:role => "tab"}
-          %h4.panel-title 
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#unverified-body", 'aria-expanded' => "true", 'aria-controls' => "unverified-body"} 
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#unverified-body", 'aria-expanded' => "true", 'aria-controls' => "unverified-body"}
               =t('unverified-speed')
               %span.badge= @area.segments.lock_level(@editor_level).important.unverified_speed.size
         #unverified-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "unverified"}
@@ -75,7 +75,7 @@
                 %th=t('roadtype')
                 %th=t('speed-ab')
                 %th=t('speed-ba')
-            %tbody  
+            %tbody
               - @area.segments.lock_level(@editor_level).important.unverified_speed.order('city_id').limit(10000).each do |segment|
                 %tr
                   %td
@@ -86,8 +86,8 @@
     - if @area.segments.lock_level(@editor_level).without_speed.size > 0
       .panel.panel-default
         #speed.panel-heading{:role => "tab"}
-          %h4.panel-title 
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#speed-body", 'aria-expanded' => "true", 'aria-controls' => "speed-body"} 
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#speed-body", 'aria-expanded' => "true", 'aria-controls' => "speed-body"}
               =t('roads-no-speed')
               %span.badge= @area.segments.lock_level(@editor_level).without_speed.size
         #speed-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "speed"}
@@ -96,7 +96,7 @@
               %tr
                 %th=t('segment-location')
                 %th=t('roadtype')
-            %tbody  
+            %tbody
               - @area.segments.lock_level(@editor_level).without_speed.order('city_id').each do |segment|
                 %tr
                   %td
@@ -106,7 +106,7 @@
       .panel.panel-default
         #level.panel-heading{:role => "tab"}
           %h4.panel-title
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#level-body", 'aria-expanded' => "true", 'aria-controls' => "level-body"} 
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#level-body", 'aria-expanded' => "true", 'aria-controls' => "level-body"}
               =t('exaggerated-elevations')
               %span.badge= @area.segments.lock_level(@editor_level).where('level < -3 or level > 3').size
         #level-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "level"}
@@ -127,7 +127,7 @@
       .panel.panel-default
         #noname.panel-heading{:role => "tab"}
           %h4.panel-title
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#noname-body", 'aria-expanded' => "true", 'aria-controls' => "noname-body"} 
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#noname-body", 'aria-expanded' => "true", 'aria-controls' => "noname-body"}
               =t('unnamed-segments')
               %span.badge= @area.segments.lock_level(@editor_level).no_name.size
         #noname-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "noname"}
@@ -150,7 +150,7 @@
       .panel.panel-default
         #blank.panel-heading{:role => "tab"}
           %h4.panel-title
-            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#blank-body", 'aria-expanded' => "true", 'aria-controls' => "blank-body"} 
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#blank-body", 'aria-expanded' => "true", 'aria-controls' => "blank-body"}
               =t('roads-blank-name')
               %span.badge= @area.segments.lock_level(@editor_level).roads.no_roundabout.without_name.count
         #blank-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "blank"}
@@ -169,3 +169,26 @@
                   %td= roadtype_name(segment.roadtype)
                   %td= segment.last_edit_on.strftime('%d/%m/%Y %H:%M')
                   %td= "#{segment.editor.username}(#{segment.editor.rank})"
+    - if @area.segments.lock_level(@editor_level).wrong_speed.count > 0
+      .panel.panel-default
+        #wrong-speed.panel-heading{:role => "tab"}
+          %h4.panel-title
+            %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#wrong-speed-body", 'aria-expanded' => "true", 'aria-controls' => "wrong-speed-body"}
+              =t('roads-wrong-speed')
+              %span.badge= @area.segments.lock_level(@editor_level).wrong_speed.count
+        #wrong-speed-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "wrong-speed"}
+          %table.table.table-condensed.table-hover
+            %thead
+              %tr
+                %th= t('roadtype')
+                %th= t('segment-location')
+                %th= t('speed-ab')
+                %th= t('speed-ba')
+            %tbody
+              - @area.segments.lock_level(@editor_level).wrong_speed.order("roadtype").each do |segment|
+                %tr
+                  %td= roadtype_name(segment.roadtype)
+                  %td
+                    %a{href: "#{@wme_url}editor/?zoom=5&lat=#{segment.latitude}&lon=#{segment.longitude}&segments=#{segment.id}", target: 'WME'}= "#{((segment.street_id.nil? or segment.street.nil? ) ? t('unnamed') : (segment.street.isempty ? t('no-street') : segment.street.name.to_s) + ', ' + (segment.street.city_id.nil? ? t('no-city') : (segment.street.city.isempty ? t('no-city') : segment.street.city.name.to_s)))}"
+                  %td.text-center= (segment.fwddirection ? (segment.fwdmaxspeed.nil? ? t('undefined') : segment.fwdmaxspeed ) : '-')
+                  %td.text-center= (segment.revdirection ? (segment.revmaxspeed.nil? ? t('undefined') : segment.revmaxspeed ) : '-')
