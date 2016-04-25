@@ -43,7 +43,7 @@ ru:
   options-attention: "Внимание:"
   roads-blank-name: "Important roads with no name"
   roads-no-speed: "Важные дороги без скоростей"
-  roads-wrong-speed: "Roads with wrong speed"
+  roads-wrong-speed: "Important Segments outside city limits with 60 km/h"
   roadtype: "Тип дороги"
   save-options: "Сохранить"
   segment-location: "Расположение сегмента"
