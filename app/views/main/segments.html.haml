@@ -169,13 +169,13 @@
                   %td= roadtype_name(segment.roadtype)
                   %td= segment.last_edit_on.strftime('%d/%m/%Y %H:%M')
                   %td= "#{segment.editor.username}(#{segment.editor.rank})"
-    - if @area.segments.lock_level(@editor_level).wrong_speed.count > 0
+    - if @area.segments.lock_level(@editor_level).wrong_speed.no_city.count > 0
       .panel.panel-default
         #wrong-speed.panel-heading{:role => "tab"}
           %h4.panel-title
             %a{:role => "button", 'data-toggle' => "collapse", 'data-parent' => "#accordion", :href => "#wrong-speed-body", 'aria-expanded' => "true", 'aria-controls' => "wrong-speed-body"}
               =t('roads-wrong-speed')
-              %span.badge= @area.segments.lock_level(@editor_level).wrong_speed.count
+              %span.badge= @area.segments.lock_level(@editor_level).wrong_speed.no_city.count
         #wrong-speed-body.panel-collapse.collapse{:role => "tabpanel", 'arialabelledby' => "wrong-speed"}
           %table.table.table-condensed.table-hover
             %thead
@@ -185,7 +185,7 @@
                 %th= t('speed-ab')
                 %th= t('speed-ba')
             %tbody
-              - @area.segments.lock_level(@editor_level).wrong_speed.order("roadtype").each do |segment|
+              - @area.segments.lock_level(@editor_level).wrong_speed.no_city.order("roadtype").each do |segment|
                 %tr
                   %td= roadtype_name(segment.roadtype)
                   %td
