@@ -37,7 +37,7 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => '127.0.0.1', :dbname => 'wazedb', :user => 'waze', :password => 'waze')
+db = PG::Connection.new(:hostaddr => '127.0.0.1', :dbname => 'ru_mapraid', :user => 'waze', :password => 'waze')
 
 db.exec_params('delete from streets where id in (select street_id from segments where longitude between $1 and $2 and latitude between $3 and $4)',[LongOeste,LongLeste,LatSul,LatNorte])
 db.exec_params('delete from segments where longitude between $1 and $2 and latitude between $3 and $4',[LongOeste,LongLeste,LatSul,LatNorte])
@@ -80,17 +80,17 @@ def busca(db,agent,longOeste,latNorte,longLeste,latSul,passo,exec)
         json['cities']['objects'].each {|c| @cities[c['id']] = "#{c['id']},\"#{c['name'].nil? ? c['name'] : c['name'][0..99]}\",#{c['stateID']},#{c['isEmpty'] ? 'TRUE':'FALSE'},#{c['countryID']}\n" if not @cities.has_key?(c['id']) }
 
         # Get street names
-        json['streets']['objects'].each {|s| @streets[s['id']] = "#{s['id']},\"#{s['name'].nil? ? s['name'] : s['name'][0..99]}\",#{s['cityID']},#{s['isEmpty'] ? 'TRUE' : 'FALSE' }\n" if not @streets.has_key?(s['id']) }
+        json['streets']['objects'].each {|s| @streets[s['id']] = "#{s['id']},\"#{s['name'].nil? ? s['name'] : s['name'][0..90].gsub(/"/,'""')}\",#{s['cityID']},#{s['isEmpty'] ? 'TRUE' : 'FALSE' }\n" if not @streets.has_key?(s['id']) }
 
         # Get segments data
         json['segments']['objects'].each do |s|
           (longitude, latitude) = s['geometry']['coordinates'][(s['geometry']['coordinates'].size / 2)]
-          @segments[s['id']] = "#{s['id']},#{longitude},#{latitude},#{s['roadType']},#{s['level']},#{(s['lockRank'].nil? ? s['lockRank'] : s['lockRank'] + 1)},#{(s['updatedOn'].nil? ? s['createdBy'] : s['updatedBy'])},#{(s['updatedOn'].nil? ? Time.at(s['createdOn']/1000) : Time.at(s['updatedOn']/1000))},#{s['primaryStreetID']},#{s['length']},#{((s['fwdDirection'] and s['toConnections'].size > 0) or (s['revDirection'] and s['fromConnections'].size > 0)) ? 'TRUE' : 'FALSE' },#{s['fwdDirection']},#{s['revDirection']},#{s['fwdMaxSpeed']},#{s['revMaxSpeed']},#{(s.has_key?('fwdMaxSpeedUnverified') ? s['fwdMaxSpeedUnverified'] : 'FALSE' )},#{(s.has_key?('revMaxSpeedUnverified') ? s['revMaxSpeedUnverified'] : 'FALSE' )},#{(s['junctionID'].nil? ? 'FALSE' : 'TRUE')},#{s['streetIDs'].size > 0}\n" if not @segments.has_key?(s['id'])
+          @segments[s['id']] = "#{s['id']},#{longitude},#{latitude},#{s['roadType']},#{s['level']},#{(s['lockRank'].nil? ? s['lockRank'] : s['lockRank'] + 1)},#{(s['updatedOn'].nil? ? s['createdBy'] : s['updatedBy'])},#{(s['updatedOn'].nil? ? Time.at(s['createdOn']/1000) : Time.at(s['updatedOn']/1000))},#{s['primaryStreetID']},#{s['length']},#{((s['fwdDirection'] and json['connections'].has_key?(s['id'].to_s + 'f')) or (s['revDirection'] and json['connections'].has_key?(s['id'].to_s + 'r'))) ? 'TRUE' : 'FALSE' },#{s['fwdDirection']},#{s['revDirection']},#{s['fwdMaxSpeed']},#{s['revMaxSpeed']},#{(s.has_key?('fwdMaxSpeedUnverified') ? s['fwdMaxSpeedUnverified'] : 'FALSE' )},#{(s.has_key?('revMaxSpeedUnverified') ? s['revMaxSpeedUnverified'] : 'FALSE' )},#{(s['junctionID'].nil? ? 'FALSE' : 'TRUE')},#{s['streetIDs'].size > 0}\n" if not @segments.has_key?(s['id'])
         end
 
       rescue Mechanize::ResponseCodeError, NoMethodError
         # If issue is related to json package size, divide the area by 4 (limited to 3 divisions)
-        if exec < 3
+        if exec < 2
           busca(db,agent,area[0],area[1],area[2],area[3],(passo/2),(exec+1))
         else
           puts "[#{Time.now.strftime('%d/%m/%Y %H:%M:%S')}] - ResponseCodeError em #{area}"
