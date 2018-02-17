@@ -25,9 +25,15 @@
         .row
           .span12
             = yield
+        .row
+          .btn-group.btn-group-justified
+            %a.btn.btn-default.linkbar{:href => t('link.waze.url'), :target => '_Waze'}= t('link.waze.text')
+            %a.btn.btn-default.linkbar{:href => t('link.forum.url'), :target => '_forum'}= t('link.forum.text')
+            %a.btn.btn-default.linkbar{:href => t('link.wiki.url'), :target => '_wiki'}= t('link.wiki.text')
+            %a.btn.btn-default.linkbar{:href => t('link.comm.url'), :target => '_comm'}= t('link.comm.text')
     %footer.container
       .row
         .col-sm-0.col-md-3.col-lg-3
           &nbsp;
-        .col-sm-12.col-md-3.col-lg-3
+        -#.col-sm-12.col-md-3.col-lg-3
           %a.text-right{:href => '/options'}= t('options-change')

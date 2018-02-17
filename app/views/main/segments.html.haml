@@ -39,7 +39,7 @@
                   %td
                     %a{:href => "#{@wme_url}editor/?zoom=5&lat=#{segment.latitude}&lon=#{segment.longitude}&segments=#{segment.id}", :target => 'WME'}= "#{((segment.street_id.nil? or segment.street.nil? ) ? t('unnamed') : ((segment.street.name.nil? or segment.street.isempty) ? t('no-street') : segment.street.name.to_s) + ', ' + (segment.street.city_id.nil? ? t('no-city') : ((segment.street.city.name.nil? or segment.street.city.isempty) ? t('no-city') : segment.street.city.name.to_s)))}"
                   %td= roadtype_name(segment.roadtype)
-    - if @area.segments.lock_level(@editor_level).wrong_lock.size > 0
+    -# - if @area.segments.lock_level(@editor_level).wrong_lock.size > 0
       .panel.panel-default
         #lock.panel-heading{:role => "tab"}
           %h4.panel-title
@@ -60,7 +60,7 @@
                     %a{:href => "#{@wme_url}editor/?zoom=5&lat=#{segment.latitude}&lon=#{segment.longitude}&segments=#{segment.id}", :target => 'WME'}= "#{((segment.street_id.nil? or segment.street.nil? ) ? t('unnamed') : ((segment.street.name.nil? or segment.street.isempty) ? t('no-street') : segment.street.name.to_s) + ', ' + (segment.street.city_id.nil? ? t('no-city') : ((segment.street.city.name.nil? or segment.street.city.isempty) ? t('no-city') : segment.street.city.name.to_s)))}"
                   %td= roadtype_name(segment.roadtype)
                   %td= segment.lock
-    - if @area.segments.lock_level(@editor_level).important.unverified_speed.size > 0
+    -# - if @area.segments.lock_level(@editor_level).important.unverified_speed.size > 0
       .panel.panel-default
         #unverified.panel-heading{:role => "tab"}
           %h4.panel-title
@@ -83,7 +83,7 @@
                   %td= roadtype_name(segment.roadtype)
                   %td.text-center= (segment.fwddirection ? (segment.fwdmaxspeed.nil? ? t('undefined') : segment.fwdmaxspeed ) : '-')
                   %td.text-center= (segment.revdirection ? (segment.revmaxspeed.nil? ? t('undefined') : segment.revmaxspeed ) : '-')
-    - if @area.segments.lock_level(@editor_level).without_speed.size > 0
+    -# s- if @area.segments.lock_level(@editor_level).without_speed.size > 0
       .panel.panel-default
         #speed.panel-heading{:role => "tab"}
           %h4.panel-title
@@ -169,7 +169,7 @@
                   %td= roadtype_name(segment.roadtype)
                   %td= segment.last_edit_on.strftime('%d/%m/%Y %H:%M')
                   %td= "#{segment.editor.username}(#{segment.editor.rank})"
-    - if @area.segments.lock_level(@editor_level).wrong_speed.no_city.count > 0
+    -# - if @area.segments.lock_level(@editor_level).wrong_speed.no_city.count > 0
       .panel.panel-default
         #wrong-speed.panel-heading{:role => "tab"}
           %h4.panel-title

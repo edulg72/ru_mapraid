@@ -9,7 +9,7 @@
 # scan_PU.rb <user> <password> <west longitude> <north latitude> <east longitude> <south latitude> <step*>
 #
 # * Defines the size in degrees (width and height) of the area to be analyzed. On very dense areas use small values to avoid server overload.
-# 
+#
 require 'mechanize'
 require 'pg'
 require 'json'
@@ -35,9 +35,9 @@ rescue Mechanize::ResponseCodeError
 end
 login = agent.post('https://www.waze.com/login/create', {"user_id" => USER, "password" => PASS}, {"X-CSRF-Token" => csrf_token})
 
-db = PG::Connection.new(:hostaddr => ENV['POSTGRESQL_DB_HOST'], :dbname => ENV['POSTGRESQL_DB_NAME'], :user => ENV['POSTGRESQL_DB_USERNAME'], :password => ENV['POSTGRESQL_DB_PASSWORD'])
+db = PG::Connection.new(:hostaddr => '127.0.0.1', :dbname => 'ru_mapraid', :user => 'waze', :password => 'waze')
 db.prepare('insert_user','insert into users (id, username, rank) values ($1,$2,$3)')
-db.prepare('insert_pu','insert into pu (id, created_by, created_on, position, staff, place_id) values ($1,$2,$3,ST_SetSRID(ST_Point($4,$5),4326),$6,$7)')
+db.prepare('insert_pu','insert into pu (id, created_by, created_on, position, staff, type, subtype, place_id) values ($1,$2,$3,ST_SetSRID(ST_Point($4,$5),4326),$6,$7,$8,$9)')
 db.prepare('insert_place','insert into places (id,name,street_id,created_on,created_by,updated_on,updated_by,position,lock,approved,residential,category,ad_locked) values ($1,$2,$3,$4,$5,$6,$7,ST_SetSRID(ST_Point($8,$9),4326),$10,$11,$12,$13,$14)')
 
 def scan_UR(db,agent,longWest,latNorth,longEast,latSouth,step,exec)
@@ -78,6 +78,8 @@ def scan_UR(db,agent,longWest,latNorth,longEast,latSouth,step,exec)
               pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
               pu['adLocked']= true
               pu['placeID']= v['id']
+              pu['type']= v['venueUpdateRequests'][0]['type']
+              pu['subType']= v['venueUpdateRequests'][0]['subType']
             else
               v['venueUpdateRequests'].each do |vu|
                 if vu.has_key?('dateAdded') and vu['dateAdded'] < pu['dateAdded']
@@ -88,12 +90,14 @@ def scan_UR(db,agent,longWest,latNorth,longEast,latSouth,step,exec)
                   pu['latitude']= (v['geometry']['type']=='Point'? v['geometry']['coordinates'][1] : v['geometry']['coordinates'][0][0][1])
                   pu['adLocked']= (v.has_key?('adLocked') ? v['adLocked'] : false)
                   pu['placeID']= v['id']
+                  pu['type']= vu['type']
+                  pu['subType']= vu['subType']
                 end
               end
             end
             if pu.has_key?('id')
               begin
-                db.exec_prepared('insert_pu',[pu['id'], pu['createdBy'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['placeID'] ])
+                db.exec_prepared('insert_pu',[pu['id'], pu['createdBy'], Time.at(pu['dateAdded']/1000), pu['longitude'], pu['latitude'], pu['adLocked'], pu['type'], pu['subType'], pu['placeID'] ])
               rescue PG::UniqueViolation
                 puts "#{pu['id']}"
               end

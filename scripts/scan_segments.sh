@@ -6756,10 +6756,11 @@ case "$3" in
     echo "Sintax: scan_segments.sh <user> <password> <state abbreviation>"
     exit 1
 esac
-psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'update segments set city_id = (select id_2 from cities_shapes where ST_Contains(geom, ST_SetSRID(ST_Point(segments.longitude, segments.latitude), 4326)) limit 1) where city_id is null;'
-psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'delete from segments where city_id is null;'
+#psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'update segments set city_id = (select id_2 from cities_shapes where ST_Contains(geom, ST_SetSRID(ST_Point(segments.longitude, segments.latitude), 4326)) limit 1) where city_id is null;'
+#psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'delete from segments where city_id is null;'
 psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'delete from segments where street_id in (select id from streets where city_id in (select id_2 from cities_shapes where country_id <> 188))'
-#psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'update segments set area_id = (select id from areas_mapraid where ST_Contains(geom, ST_SetSRID(ST_Point(segments.longitude, segments.latitude), 4326)) limit 1) where area_id is null'
+psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'update segments set area_id = (select id from areas_mapraid where ST_Contains(geom, ST_SetSRID(ST_Point(segments.longitude, segments.latitude), 4326)) limit 1) where area_id is null'
+psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'delete from segments where area_id is null;'
 #psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'delete from streets where id in (select id from streets except select distinct street_id from segments);'
 psql -h 127.0.0.1 -d ru_mapraid -U waze -c 'update segments s1 set dc_density = (select count(*) from segments s2 where not s2.connected and s2.latitude between (s1.latitude - 0.01) and (s1.latitude + 0.01) and s2.longitude between (s1.longitude - 0.01) and (s1.longitude + 0.01)) where not s1.connected and s1.dc_density is null;'
 psql -h 127.0.0.1 -d ru_mapraid -U waze -c "update updates set updated_at = current_timestamp where object = '$3';"

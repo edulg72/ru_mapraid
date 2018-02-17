@@ -5,22 +5,15 @@
         .col-sm-12.col-md-6.col-lg-4
           .panel.panel-default
             .panel-heading
-              .panel-title= area.name
+              .panel-title
+                %span.badge= area.id
+                = area.name
             .panel-body
               .text-right= "#{t('updated-at')} #{area.updates.updated_at.strftime('%d/%m/%Y %H:%M %Z')}"
             %ul.list-group
               %li.list-group-item
                 %a{:href => "/segments_area/#{area.id}"}= t('disconnected')
                 %span.badge.text-right= area.segments.drivable.disconnected.count
-              %li.list-group-item
-                %a{:href => "/segments_area/#{area.id}"}=t('wrong-lock')
-                %span.badge= area.segments.wrong_lock.count
-              %li.list-group-item
-                %a{:href => "/segments_area/#{area.id}"}=t('unverified-speed')
-                %span.badge= area.segments.important.unverified_speed.count
-              %li.list-group-item
-                %a{:href => "/segments_area/#{area.id}"}=t('roads-no-speed')
-                %span.badge= area.segments.without_speed.count
               %li.list-group-item
                 %a{:href => "/segments_area/#{area.id}"}=t('exaggerated-elevations')
                 %span.badge= area.segments.where('level < -3 or level > 3').count
@@ -31,5 +24,5 @@
                 %a{:href => "/segments_area/#{area.id}"}=t('roads-blank-name')
                 %span.badge= area.segments.roads.no_roundabout.without_name.count
               %li.list-group-item
-                %a{:href => "/segments_area/#{area.id}"}=t('roads-wrong-speed')
-                %span.badge= area.segments.wrong_speed.no_city.count
+                %a{:href => "/segments_area/#{area.id}"}=t('pus')
+                %span.badge= area.pus.count
